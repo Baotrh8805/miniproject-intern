@@ -1,13 +1,13 @@
 package com.sun.training.employeemanagement.service;
 
 import com.sun.training.employeemanagement.dto.DepartmentRequest;
+import com.sun.training.employeemanagement.exception.ResourceNotFoundException;
 import com.sun.training.employeemanagement.model.Department;
 import com.sun.training.employeemanagement.repository.DepartmentRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DepartmentService {
@@ -31,11 +31,16 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public Optional<Department> getDepartmentById(Long id) {
-        return departmentRepository.findById(id);
+    public Department getDepartmentById(Long id) {
+        return departmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng ban với ID: " + id));
     }
 
     public Department createDepartment(DepartmentRequest request) {
+        if (departmentRepository.existsByCode(request.getCode().trim().toUpperCase())) {
+            throw new IllegalArgumentException("Mã phòng ban đã tồn tại: " + request.getCode());
+        }
+
         Department department = new Department();
         department.setCode(request.getCode().trim().toUpperCase());
         department.setName(request.getName().trim());

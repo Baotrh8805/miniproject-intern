@@ -1,6 +1,7 @@
 package com.sun.training.employeemanagement.service;
 
 import com.sun.training.employeemanagement.dto.EmployeeRequest;
+import com.sun.training.employeemanagement.exception.ResourceNotFoundException;
 import com.sun.training.employeemanagement.model.Department;
 import com.sun.training.employeemanagement.model.Employee;
 import com.sun.training.employeemanagement.repository.DepartmentRepository;
@@ -9,7 +10,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -43,7 +43,7 @@ public class EmployeeService {
         }
     }
 
-    // Lấy danh sách nhân viên kết hợp tìm kiếm linh hoạt theo tên và/hoặc phòng ban
+    // Lấy danh sách nhân viên kết hợp tìm kiếm theo tên và/hoặc phòng ban
     public List<Employee> getAllEmployees(String name, Long departmentId) {
         boolean hasName = name != null && !name.trim().isEmpty();
         boolean hasDept = departmentId != null;
@@ -58,9 +58,10 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    // Lấy chi tiết nhân viên theo ID
-    public Optional<Employee> getEmployeeById(Long id) {
-        return employeeRepository.findById(id);
+    // Lấy chi tiết nhân viên theo ID (ném ResourceNotFoundException nếu không tìm thấy)
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy nhân viên với ID: " + id));
     }
 
     // Thêm mới nhân viên vào CSDL
@@ -77,43 +78,34 @@ public class EmployeeService {
         } while (employeeRepository.existsByEmployeeCode(code));
         employee.setEmployeeCode(code);
 
-        // Gán phòng ban nếu có departmentId
-        if (request.getDepartmentId() != null) {
-            Department department = departmentRepository.findById(request.getDepartmentId())
-                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng ban với ID: " + request.getDepartmentId()));
-            employee.setDepartment(department);
-        }
+        // Gán phòng ban
+        Department department = departmentRepository.findById(request.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng ban với ID: " + request.getDepartmentId()));
+        employee.setDepartment(department);
 
         return employeeRepository.save(employee);
     }
 
     // Cập nhật thông tin nhân viên theo ID
-    public Optional<Employee> updateEmployee(Long id, EmployeeRequest request) {
-        return employeeRepository.findById(id).map(existing -> {
-            if (request.getName() != null && !request.getName().trim().isEmpty()) {
-                existing.setName(utilityService.formatString(request.getName()));
-            }
-            if (request.getEmail() != null) {
-                existing.setEmail(request.getEmail());
-            }
-            if (request.getSalary() != null) {
-                existing.setSalary(request.getSalary());
-            }
-            if (request.getDepartmentId() != null) {
-                Department department = departmentRepository.findById(request.getDepartmentId())
-                        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng ban với ID: " + request.getDepartmentId()));
-                existing.setDepartment(department);
-            }
-            return employeeRepository.save(existing);
-        });
+    public Employee updateEmployee(Long id, EmployeeRequest request) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy nhân viên với ID: " + id));
+
+        existing.setName(utilityService.formatString(request.getName()));
+        existing.setEmail(request.getEmail());
+        existing.setSalary(request.getSalary());
+
+        Department department = departmentRepository.findById(request.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng ban với ID: " + request.getDepartmentId()));
+        existing.setDepartment(department);
+
+        return employeeRepository.save(existing);
     }
 
     // Xóa nhân viên theo ID
-    public boolean deleteEmployee(Long id) {
-        if (employeeRepository.existsById(id)) {
-            employeeRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteEmployee(Long id) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy nhân viên với ID: " + id));
+        employeeRepository.delete(existing);
     }
 }

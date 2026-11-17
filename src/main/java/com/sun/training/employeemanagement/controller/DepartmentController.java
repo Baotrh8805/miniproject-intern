@@ -28,9 +28,7 @@ public class DepartmentController {
     // Lấy chi tiết phòng ban theo ID
     @GetMapping("/{id}")
     public ResponseEntity<Department> getDepartmentById(@PathVariable Long id) {
-        return departmentService.getDepartmentById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(departmentService.getDepartmentById(id));
     }
 
     // Thêm mới phòng ban
