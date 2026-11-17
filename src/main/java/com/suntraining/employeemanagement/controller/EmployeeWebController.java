@@ -6,6 +6,8 @@ import com.suntraining.employeemanagement.model.Employee;
 import com.suntraining.employeemanagement.service.DepartmentService;
 import com.suntraining.employeemanagement.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/employees")
 public class EmployeeWebController {
+
+    private static final Logger log = LoggerFactory.getLogger(EmployeeWebController.class);
 
     private final EmployeeService employeeService;
     private final DepartmentService departmentService;
@@ -33,6 +37,8 @@ public class EmployeeWebController {
             @RequestParam(required = false) Long departmentId,
             Model model) {
 
+        log.info("Truy cập trang danh sách nhân viên [GET /employees/list] - Bộ lọc: name='{}', departmentId={}", name, departmentId);
+
         List<Employee> employees = employeeService.getAllEmployees(name, departmentId);
         List<Department> departments = departmentService.getAllDepartments();
 
@@ -47,6 +53,7 @@ public class EmployeeWebController {
     // 2. Hiển thị form thêm mới nhân viên
     @GetMapping("/add")
     public String showAddForm(Model model) {
+        log.info("Truy cập trang form thêm nhân viên mới [GET /employees/add]");
         model.addAttribute("employee", new EmployeeRequest());
         model.addAttribute("departments", departmentService.getAllDepartments());
         return "employees/add";
@@ -59,13 +66,17 @@ public class EmployeeWebController {
             BindingResult bindingResult,
             Model model) {
 
+        log.info("Nhận dữ liệu submit thêm nhân viên [POST /employees/add]: name='{}', email='{}'",
+                request.getName(), request.getEmail());
+
         if (bindingResult.hasErrors()) {
-            // Khi có lỗi validation, nạp lại danh sách phòng ban để hiển thị dropdown và ở lại trang form
+            log.warn("Dữ liệu form thêm nhân viên không hợp lệ ({} lỗi validation)", bindingResult.getErrorCount());
             model.addAttribute("departments", departmentService.getAllDepartments());
             return "employees/add";
         }
 
-        employeeService.createEmployee(request);
+        Employee created = employeeService.createEmployee(request);
+        log.info("Thêm nhân viên qua form thành công: mã={}, chuyển hướng về /employees/list", created.getEmployeeCode());
         return "redirect:/employees/list";
     }
 }

@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    # Môi trường Prod: Ưu tiên nhận từ biến môi trường, fallback về DB local nếu chưa có biến môi trường
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/employee_management?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      # Trên Prod: chỉ validate cấu trúc bảng, không tự ý chỉnh sửa schema
+      ddl-auto: validate
+    show-sql: false
+
+# Môi trường Prod: Tối ưu hiệu năng, giảm log thừa, ghi log quan trọng ra file logs/employee-management.log
+logging:
+  level:
+    root: WARN
+    com.suntraining.employeemanagement: INFO
+    org.hibernate.SQL: ERROR
+    org.springframework.web: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [PROD] [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/employee-management.log

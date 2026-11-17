@@ -1,0 +1,4 @@
+2026-11-17 22:51:40 [main] INFO  c.s.e.EmployeeManagementApplication - Starting EmployeeManagementApplication using Java 25.0.2 with PID 20486 (/Users/thinguyen/nam 4/SUN_TRAINING-main/miniproject/employee-management/target/classes started by thinguyen in /Users/thinguyen/nam 4/SUN_TRAINING-main/miniproject/employee-management)
+2026-11-17 22:51:40 [main] INFO  c.s.e.EmployeeManagementApplication - The following 1 profile is active: "prod"
+2026-11-17 22:51:42 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-17 22:51:42 [main] INFO  c.s.e.EmployeeManagementApplication - Started EmployeeManagementApplication in 2.892 seconds (process running for 3.092)

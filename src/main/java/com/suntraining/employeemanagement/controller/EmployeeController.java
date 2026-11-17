@@ -4,6 +4,8 @@ import com.suntraining.employeemanagement.dto.EmployeeRequest;
 import com.suntraining.employeemanagement.model.Employee;
 import com.suntraining.employeemanagement.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+
+    private static final Logger log = LoggerFactory.getLogger(EmployeeController.class);
 
     private final EmployeeService employeeService;
 
@@ -26,6 +30,7 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> getEmployees(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long departmentId) {
+        log.info("[REST API] GET /employees - name='{}', departmentId={}", name, departmentId);
         return ResponseEntity.ok(employeeService.getAllEmployees(name, departmentId));
     }
 
@@ -33,6 +38,7 @@ public class EmployeeController {
     // Ví dụ: GET /employees/1
     @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        log.info("[REST API] GET /employees/{}", id);
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
@@ -40,6 +46,7 @@ public class EmployeeController {
     // Ví dụ: POST /employees kèm JSON body
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeRequest request) {
+        log.info("[REST API] POST /employees - Tạo mới nhân viên: {}", request.getName());
         Employee created = employeeService.createEmployee(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -50,6 +57,7 @@ public class EmployeeController {
     public ResponseEntity<Employee> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequest request) {
+        log.info("[REST API] PUT /employees/{} - Cập nhật nhân viên", id);
         return ResponseEntity.ok(employeeService.updateEmployee(id, request));
     }
 
@@ -57,6 +65,7 @@ public class EmployeeController {
     // Ví dụ: DELETE /employees/1
     @DeleteMapping("/{id:[0-9]+}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        log.info("[REST API] DELETE /employees/{} - Xóa nhân viên", id);
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
