@@ -1,8 +1,8 @@
-package com.sun.training.employeemanagement.controller;
+package com.suntraining.employeemanagement.controller;
 
-import com.sun.training.employeemanagement.dto.DepartmentRequest;
-import com.sun.training.employeemanagement.model.Department;
-import com.sun.training.employeemanagement.service.DepartmentService;
+import com.suntraining.employeemanagement.dto.DepartmentRequest;
+import com.suntraining.employeemanagement.model.Department;
+import com.suntraining.employeemanagement.service.DepartmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

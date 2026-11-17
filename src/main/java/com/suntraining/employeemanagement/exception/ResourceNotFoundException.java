@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.exception;
+package com.suntraining.employeemanagement.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

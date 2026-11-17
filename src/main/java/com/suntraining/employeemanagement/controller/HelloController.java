@@ -1,6 +1,6 @@
-package com.sun.training.employeemanagement.controller;
+package com.suntraining.employeemanagement.controller;
 
-import com.sun.training.employeemanagement.dto.HelloResponse;
+import com.suntraining.employeemanagement.dto.HelloResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

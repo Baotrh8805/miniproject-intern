@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.dto;
+package com.suntraining.employeemanagement.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;

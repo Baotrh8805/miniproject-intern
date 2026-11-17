@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.dto;
+package com.suntraining.employeemanagement.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

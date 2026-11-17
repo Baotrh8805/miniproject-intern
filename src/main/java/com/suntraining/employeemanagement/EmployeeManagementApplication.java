@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement;
+package com.suntraining.employeemanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.dto;
+package com.suntraining.employeemanagement.dto;
 
 public class DepartmentRequest {
 

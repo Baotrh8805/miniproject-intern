@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.service;
+package com.suntraining.employeemanagement.service;
 
 import org.springframework.stereotype.Service;
 

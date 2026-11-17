@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.model;
+package com.suntraining.employeemanagement.model;
 
 import jakarta.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.sun.training.employeemanagement.config;
+package com.suntraining.employeemanagement.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

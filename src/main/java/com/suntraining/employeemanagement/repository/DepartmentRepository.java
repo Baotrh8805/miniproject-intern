@@ -1,6 +1,6 @@
-package com.sun.training.employeemanagement.repository;
+package com.suntraining.employeemanagement.repository;
 
-import com.sun.training.employeemanagement.model.Department;
+import com.suntraining.employeemanagement.model.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

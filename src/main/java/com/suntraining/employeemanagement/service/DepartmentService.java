@@ -1,9 +1,9 @@
-package com.sun.training.employeemanagement.service;
+package com.suntraining.employeemanagement.service;
 
-import com.sun.training.employeemanagement.dto.DepartmentRequest;
-import com.sun.training.employeemanagement.exception.ResourceNotFoundException;
-import com.sun.training.employeemanagement.model.Department;
-import com.sun.training.employeemanagement.repository.DepartmentRepository;
+import com.suntraining.employeemanagement.dto.DepartmentRequest;
+import com.suntraining.employeemanagement.exception.ResourceNotFoundException;
+import com.suntraining.employeemanagement.model.Department;
+import com.suntraining.employeemanagement.repository.DepartmentRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 

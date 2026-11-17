@@ -1,6 +1,6 @@
-package com.sun.training.employeemanagement.controller;
+package com.suntraining.employeemanagement.controller;
 
-import com.sun.training.employeemanagement.service.UtilityService;
+import com.suntraining.employeemanagement.service.UtilityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

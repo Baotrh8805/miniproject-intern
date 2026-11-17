@@ -1,11 +1,11 @@
-package com.sun.training.employeemanagement.service;
+package com.suntraining.employeemanagement.service;
 
-import com.sun.training.employeemanagement.dto.EmployeeRequest;
-import com.sun.training.employeemanagement.exception.ResourceNotFoundException;
-import com.sun.training.employeemanagement.model.Department;
-import com.sun.training.employeemanagement.model.Employee;
-import com.sun.training.employeemanagement.repository.DepartmentRepository;
-import com.sun.training.employeemanagement.repository.EmployeeRepository;
+import com.suntraining.employeemanagement.dto.EmployeeRequest;
+import com.suntraining.employeemanagement.exception.ResourceNotFoundException;
+import com.suntraining.employeemanagement.model.Department;
+import com.suntraining.employeemanagement.model.Employee;
+import com.suntraining.employeemanagement.repository.DepartmentRepository;
+import com.suntraining.employeemanagement.repository.EmployeeRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +30,16 @@ public class EmployeeService {
     @PostConstruct
     public void initDefaultEmployees() {
         if (employeeRepository.count() == 0) {
-            Department itDept = departmentRepository.findByCode("IT").orElse(null);
-            Department hrDept = departmentRepository.findByCode("HR").orElse(null);
+            Department itDept = departmentRepository.findByCode("IT").orElseGet(() ->
+                    departmentRepository.save(new Department(null, "IT", "Phòng Công nghệ Thông tin", "Phát triển phần mềm"))
+            );
+            Department hrDept = departmentRepository.findByCode("HR").orElseGet(() ->
+                    departmentRepository.save(new Department(null, "HR", "Phòng Nhân sự", "Quản lý tuyển dụng"))
+            );
 
-            if (itDept != null) {
-                employeeRepository.save(new Employee(null, "EMP-1001", "Nguyen Van A", "vana@sun.com", 1500.0, itDept));
-                employeeRepository.save(new Employee(null, "EMP-1003", "Le Van C", "vanc@sun.com", 1800.0, itDept));
-            }
-            if (hrDept != null) {
-                employeeRepository.save(new Employee(null, "EMP-1002", "Tran Thi B", "thib@sun.com", 1200.0, hrDept));
-            }
+            employeeRepository.save(new Employee(null, "EMP-1001", "Nguyen Van A", "vana@sun.com", 1500.0, itDept));
+            employeeRepository.save(new Employee(null, "EMP-1003", "Le Van C", "vanc@sun.com", 1800.0, itDept));
+            employeeRepository.save(new Employee(null, "EMP-1002", "Tran Thi B", "thib@sun.com", 1200.0, hrDept));
         }
     }
 

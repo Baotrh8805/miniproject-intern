@@ -1,8 +1,8 @@
-package com.sun.training.employeemanagement.controller;
+package com.suntraining.employeemanagement.controller;
 
-import com.sun.training.employeemanagement.dto.EmployeeRequest;
-import com.sun.training.employeemanagement.model.Employee;
-import com.sun.training.employeemanagement.service.EmployeeService;
+import com.suntraining.employeemanagement.dto.EmployeeRequest;
+import com.suntraining.employeemanagement.model.Employee;
+import com.suntraining.employeemanagement.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +29,9 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getAllEmployees(name, departmentId));
     }
 
-    // 2. Lấy chi tiết một nhân viên theo ID (ném 404 nếu không tìm thấy)
+    // 2. Lấy chi tiết một nhân viên theo ID (chỉ nhận số để tránh xung đột với các URL chữ như /list, /add)
     // Ví dụ: GET /employees/1
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
@@ -46,7 +46,7 @@ public class EmployeeController {
 
     // 4. Cập nhật thông tin nhân viên kèm kiểm tra dữ liệu (@Valid)
     // Ví dụ: PUT /employees/1 kèm JSON body
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     public ResponseEntity<Employee> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequest request) {
@@ -55,7 +55,7 @@ public class EmployeeController {
 
     // 5. Xóa nhân viên theo ID
     // Ví dụ: DELETE /employees/1
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();

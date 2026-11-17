@@ -1,6 +1,6 @@
-package com.sun.training.employeemanagement.exception;
+package com.suntraining.employeemanagement.exception;
 
-import com.sun.training.employeemanagement.dto.ErrorResponse;
+import com.suntraining.employeemanagement.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
