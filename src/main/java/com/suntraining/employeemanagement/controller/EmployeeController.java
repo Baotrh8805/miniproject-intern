@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employees")
@@ -34,7 +35,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getAllEmployees(name, departmentId));
     }
 
-    // 2. Lấy chi tiết một nhân viên theo ID (chỉ nhận số để tránh xung đột với các URL chữ như /list, /add)
+    // 2. Lấy chi tiết một nhân viên theo ID (chỉ nhận số để tránh xung đột với các URL chữ như /list, /add, /report)
     // Ví dụ: GET /employees/1
     @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
@@ -68,5 +69,13 @@ public class EmployeeController {
         log.info("[REST API] DELETE /employees/{} - Xóa nhân viên", id);
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // 6. Báo cáo tổng số nhân viên (Có Caching trong 1 phút)
+    // Ví dụ: GET /employees/report
+    @GetMapping("/report")
+    public ResponseEntity<Map<String, Object>> getEmployeeReport() {
+        log.info("[REST API] GET /employees/report - Yêu cầu lấy báo cáo tổng số nhân viên");
+        return ResponseEntity.ok(employeeService.getEmployeeReport());
     }
 }

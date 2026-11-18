@@ -5,6 +5,11 @@ spring:
     active: dev
   thymeleaf:
     cache: false
+  # Cấu hình Caching: Sử dụng Caffeine Engine với thời gian sống (TTL) 60 giây (1 phút)
+  cache:
+    type: caffeine
+    caffeine:
+      spec: expireAfterWrite=60s
 
 server:
   port: 8080
@@ -13,3 +18,13 @@ server:
     include-binding-errors: always
     include-stacktrace: always
     include-exception: true
+
+# Cấu hình Spring Boot Actuator: Mở các endpoint giám sát và hiển thị chi tiết health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: always

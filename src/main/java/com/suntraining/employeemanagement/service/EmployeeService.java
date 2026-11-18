@@ -9,9 +9,14 @@ import com.suntraining.employeemanagement.repository.EmployeeRepository;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeService {
@@ -149,5 +154,23 @@ public class EmployeeService {
         employeeRepository.delete(existing);
         log.info("Đã xóa thành công nhân viên: ID={}, employeeCode='{}', name='{}'",
                 existing.getId(), existing.getEmployeeCode(), existing.getName());
+    }
+
+    // Báo cáo tổng số nhân viên - Sử dụng Caching với thời gian sống TTL 1 phút (60 giây)
+    @Cacheable(value = "employeeReport")
+    public Map<String, Object> getEmployeeReport() {
+        log.info("--> [CACHE MISS] Đang truy vấn CSDL để tính toán báo cáo tổng số nhân viên...");
+
+        long totalEmployees = employeeRepository.count();
+        long totalDepartments = departmentRepository.count();
+
+        Map<String, Object> report = new HashMap<>();
+        report.put("totalEmployees", totalEmployees);
+        report.put("totalDepartments", totalDepartments);
+        report.put("generatedAt", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        report.put("cachedFor", "1 phút (60 giây)");
+        report.put("message", "Dữ liệu được lưu trong bộ nhớ đệm (Cache) trong vòng 1 phút kể từ thời điểm tạo.");
+
+        return report;
     }
 }
