@@ -1,10 +1,12 @@
 package com.suntraining.employeemanagement.controller;
 
+import com.suntraining.employeemanagement.dto.CompanySummaryStatistic;
 import com.suntraining.employeemanagement.dto.EmployeeRequest;
 import com.suntraining.employeemanagement.model.Department;
 import com.suntraining.employeemanagement.model.Employee;
 import com.suntraining.employeemanagement.service.DepartmentService;
 import com.suntraining.employeemanagement.service.EmployeeService;
+import com.suntraining.employeemanagement.service.StatisticService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +25,14 @@ public class EmployeeWebController {
 
     private final EmployeeService employeeService;
     private final DepartmentService departmentService;
+    private final StatisticService statisticService;
 
-    public EmployeeWebController(EmployeeService employeeService, DepartmentService departmentService) {
+    public EmployeeWebController(EmployeeService employeeService,
+                                 DepartmentService departmentService,
+                                 StatisticService statisticService) {
         this.employeeService = employeeService;
         this.departmentService = departmentService;
+        this.statisticService = statisticService;
     }
 
     // 1. Hiển thị danh sách nhân viên & Tìm kiếm theo tên/phòng ban
@@ -78,5 +84,17 @@ public class EmployeeWebController {
         Employee created = employeeService.createEmployee(request);
         log.info("Thêm nhân viên qua form thành công: mã={}, chuyển hướng về /employees/list", created.getEmployeeCode());
         return "redirect:/employees/list";
+    }
+
+    // 4. Hiển thị trang báo cáo & thống kê nhân sự (GET /employees/statistics)
+    @GetMapping("/statistics")
+    public String showStatistics(Model model) {
+        log.info("Truy cập trang thống kê báo cáo nhân sự [GET /employees/statistics]");
+
+        CompanySummaryStatistic summary = statisticService.getCompanySummary();
+        model.addAttribute("summary", summary);
+        model.addAttribute("departmentStats", summary.getDepartmentStatistics());
+
+        return "employees/statistics";
     }
 }

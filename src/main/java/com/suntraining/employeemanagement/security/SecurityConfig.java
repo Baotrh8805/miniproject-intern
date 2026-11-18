@@ -66,8 +66,8 @@ public class SecurityConfig {
                         // 1. Cho phép công khai: Đăng ký, Đăng nhập, Actuator, Error
                         .requestMatchers("/api/auth/**", "/actuator/**", "/error").permitAll()
 
-                        // 2. USER và ADMIN: Được quyền XEM danh sách và chi tiết nhân viên, phòng ban, báo cáo
-                        .requestMatchers(HttpMethod.GET, "/employees/**", "/departments/**").hasAnyRole("USER", "ADMIN")
+                        // 2. USER và ADMIN: Được quyền XEM danh sách và chi tiết nhân viên, phòng ban, thống kê báo cáo
+                        .requestMatchers(HttpMethod.GET, "/employees/**", "/departments/**", "/api/statistics/**").hasAnyRole("USER", "ADMIN")
 
                         // 3. Chỉ ADMIN: Mới được quyền THÊM, SỬA, XÓA nhân viên (CRUD) và phòng ban
                         .requestMatchers(HttpMethod.POST, "/employees/**", "/departments/**").hasRole("ADMIN")
